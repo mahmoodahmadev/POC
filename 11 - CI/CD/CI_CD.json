@@ -1,0 +1,407 @@
+{
+	"info": {
+		"_postman_id": "6d9a4d5a-6780-476c-987d-0dc09f6347b3",
+		"name": "11 - CI/CD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Jenkins",
+			"item": [
+				{
+					"name": "Create a Department",
+					"item": [
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a2c5fbcd-e006-4a45-b810-864716ecec22",
+										"exec": [
+											"const response = pm.response.json()",
+											"",
+											"pm.collectionVariables.set('token', response.authToken)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "fd5f0e87-2bd3-45e1-82e6-1ce1612cb8be",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"dealerId\": \"{{login_dmsDealerId}}\",\n    \"userName\": \"{{login_username}}\",\n    \"password\": \"{{login_password}}\",\n    \"token\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/{{authentication_endpoint}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Primary location ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "75a35659-69a9-4a91-8401-6c1e4ec6d175",
+										"exec": [
+											"const response = pm.response.json()",
+											"console.log(response)",
+											"pm.test('Check if the response code is 200', () => {",
+											"    pm.expect(pm.response).to.have.status(200)",
+											"})",
+											"",
+											"const primaryDealerId = response.dealerLocationSettings[0].dealerId",
+											"",
+											"pm.collectionVariables.set('primaryDealerId', primaryDealerId)",
+											"console.log(primaryDealerId)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "aa000a24-5a0d-47f1-ad4f-b58a22eeb50d",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/dealer-api/v2/dealers/:dmsdealerid/settings",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"dealer-api",
+										"v2",
+										"dealers",
+										":dmsdealerid",
+										"settings"
+									],
+									"variable": [
+										{
+											"id": "6c92eee0-9dce-4a93-b071-2e01c3e43138",
+											"key": "dmsdealerid",
+											"value": "{{login_dmsDealerId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7f9511cf-8d08-4b89-8c65-b968a68e985e",
+										"exec": [
+											"const response = pm.response.json();",
+											"",
+											"// Test for status code",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// Test for response time",
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200000);",
+											"});",
+											"",
+											"const crmUserId = response[0].crmUserId",
+											"const userId = response[0].userId",
+											"console.log(crmUserId)",
+											"",
+											"pm.collectionVariables.set('crmUserId', crmUserId)",
+											"pm.collectionVariables.set('userId', userId)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "4a7722ef-f37a-4a5b-98b9-b2c59ce68ee8",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{host}}/{{users_endpoint}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Department",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "c037be26-b167-4e1a-b4c5-67c691a0cd7d",
+										"exec": [
+											"const departmentName = pm.environment.replaceIn(\"{{$randomDepartment}}\")",
+											"",
+											"pm.environment.set('departmentName', departmentName)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "c551815c-e696-4b3c-9afd-d50c1c366ebc",
+										"exec": [
+											"const response = pm.response.json()",
+											"",
+											"// Test for a 200 status response",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// Test for response time",
+											"pm.test(\"Response time is less than 3000ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);",
+											"});",
+											"",
+											"// Test for the content type of the response",
+											"pm.test(\"Content-Type is present and is application/json\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"// Test for the structure and properties of the response body",
+											"pm.test(\"Response body has the expected structure and properties\", function () {",
+											"    const responseBody = pm.response.json();",
+											"",
+											"    pm.expect(responseBody).to.have.property(\"crmUserIds\");",
+											"    pm.expect(responseBody).to.have.property(\"departmentId\");",
+											"    pm.expect(responseBody).to.have.property(\"dealerId\");",
+											"    pm.expect(responseBody).to.have.property(\"departmentName\");",
+											"    pm.expect(responseBody).to.have.property(\"description\");",
+											"    pm.expect(responseBody).to.have.property(\"departmentType\");",
+											"    pm.expect(responseBody).to.have.property(\"mock\");",
+											"    pm.expect(responseBody).to.have.property(\"isFacebookTokenExpired\");",
+											"});",
+											"",
+											"pm.test('Check if the department is created with expected data', () => {",
+											"",
+											"    // Get the corresponding environment variables",
+											"    let expecttedCrmUserId = pm.environment.get(\"crmUserId\");",
+											"    let expectedDealerId = pm.environment.get(\"primaryDealerId\");",
+											"    let expectedDepartmentName = pm.environment.get(\"departmentName\");",
+											"",
+											"    let actualCrmUserId = response.crmUserIds[0]",
+											"    let actualDealerId = response.dealerId",
+											"    let actualDepartmentName = response.departmentName",
+											"// Check if the response body contains the expected data",
+											"",
+											"    pm.expect(actualCrmUserId).to.equal(expecttedCrmUserId);",
+											"    pm.expect(actualDealerId).to.equal(expectedDealerId);",
+											"    pm.expect(actualDepartmentName).to.equal(expectedDepartmentName);",
+											"})",
+											"",
+											"pm.collectionVariables.set('created_department_id', response.departmentId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "86cb18ba-540c-40bc-b915-855e04cc3560",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"departmentName\": \"{{departmentName}}\",\n    \"dealerId\": \"{{primaryDealerId}}\",\n    \"crmUserIds\": [\n        \"{{crmUserId}}\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/dealer-api/v2/dealers/:dmsdealerid/departments",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"dealer-api",
+										"v2",
+										"dealers",
+										":dmsdealerid",
+										"departments"
+									],
+									"variable": [
+										{
+											"id": "bee304f7-061c-44ea-aa2a-6f6186232a38",
+											"key": "dmsdealerid",
+											"value": "{{login_dmsDealerId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Deparmtent",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "784fe3da-53a2-4aca-a428-e292ad625973",
+										"exec": [
+											"// Test for status code",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"// Test for response time",
+											"pm.test(\"Response time is less than 5s\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);",
+											"});",
+											"",
+											"// Test for content type",
+											"pm.test(\"Content-Type is present and is application/json\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+											"});",
+											"",
+											"// Test for response body properties",
+											"pm.test(\"Response body has required properties\", function () {",
+											"    const jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array').that.is.not.empty;",
+											"    pm.expect(jsonData[0]).to.have.property('dealerId');",
+											"    pm.expect(jsonData[0]).to.have.property('phoneNumber');",
+											"    pm.expect(jsonData[0]).to.have.property('departmentName');",
+											"});",
+											"",
+											"// Test for response body data",
+											"pm.test(\"Response body data is valid\", function () {",
+											"",
+											"    const response = pm.response.json()",
+											"",
+											"    const expectedDmsDealerId = pm.environment.get('login_dmsDealerId')",
+											"    const expectedDealeriId = pm.collectionVariables.get('primaryDealerId')",
+											"    const expectedDepartmentName = pm.collectionVariables.get('departmentName')",
+											"    const expectedDepartmentId = pm.collectionVariables.get('created_department_id')",
+											"",
+											"    let departmentData;",
+											"",
+											"    response.forEach(item => {",
+											"        if(item.departmentId == expectedDepartmentId){",
+											"            departmentData = item",
+											"            console.log(departmentData)",
+											"        }",
+											"    });",
+											"",
+											"    pm.expect(departmentData).to.not.be.undefined;",
+											"",
+											"    const actualDmsDealerId = departmentData.dmsDealerIdCrm",
+											"    const actualDealeriId = departmentData.dealerId",
+											"    const actualDepartmentName = departmentData.departmentName",
+											"",
+											"    pm.expect(actualDealeriId).to.equal(expectedDealeriId)",
+											"    pm.expect(actualDmsDealerId).to.equal(expectedDmsDealerId)",
+											"    pm.expect(actualDepartmentName).to.equal(expectedDepartmentName)",
+											"",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "3575fe74-a743-4e45-8501-c4d4f4fe9265",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/dealer-api/dealers/dealer-phonenumbers/:dmsdealerid/user/:userid",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"dealer-api",
+										"dealers",
+										"dealer-phonenumbers",
+										":dmsdealerid",
+										"user",
+										":userid"
+									],
+									"variable": [
+										{
+											"id": "8960e8bf-4478-44d3-97cb-08cab40865fa",
+											"key": "dmsdealerid",
+											"value": "{{login_dmsDealerId}}"
+										},
+										{
+											"id": "27134fc1-9853-4b66-a0fd-521748d59a6d",
+											"key": "userid",
+											"value": "{{userId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "05c1eb33-5511-41a2-b98b-4bd416d8ae65",
+					"auth": {
+						"type": "bearer",
+						"bearer": {
+							"token": "{{token}}"
+						}
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7090d448-d270-4e3e-ac47-063c67021e4f",
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "1b076363-1002-41f8-9783-0cbc2622dce5",
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"id": "763ff7c3-c3b3-4760-a5e0-c970378e1bcf"
+		}
+	]
+}
