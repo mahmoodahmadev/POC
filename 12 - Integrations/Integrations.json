@@ -360,7 +360,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "2fc0cefe-2785-445d-bb5f-102e7915b347",
+				"id": "bb8624d2-4b67-4817-aed3-3d37d47c6de8",
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
@@ -371,11 +371,13 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "29c2d3ff-d7d3-4d4d-a7c3-f1b65baa80a1",
+				"id": "3d9ad40c-77b1-4ef1-ad79-5104cddecb2e",
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
-					"//some text"
+					"//some text",
+					"",
+					"console.log(\"Integration with github\")"
 				]
 			}
 		}
