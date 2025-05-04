@@ -21,6 +21,17 @@
 						"type": "text/javascript",
 						"packages": {}
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1a9254f7-efec-412e-a3f5-b4450c6ccace",
+						"exec": [
+							"console.log(\"integration with github\")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
 				}
 			],
 			"id": "fb00b8b0-6a03-403a-9bc5-834313a53ecb",
