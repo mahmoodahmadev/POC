@@ -27,7 +27,7 @@
 					"script": {
 						"id": "1a9254f7-efec-412e-a3f5-b4450c6ccace",
 						"exec": [
-							"console.log(\"integration with github\")"
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -357,6 +357,19 @@
 					]
 				},
 				"description": "### Add New Deal\n\nThis endpoint allows you to add a new deal to the CRM system.\n\n#### Request Body\n\n- type (Number) - The type of the deal.\n    \n- dealType (Number) - The type of deal being added.\n    \n- customerContacts (Array) - An array of customer contacts associated with the deal, including customer and contact IDs.\n    \n- description (String) - The description of the deal.\n    \n- title (String) - The title of the deal.\n    \n- assignedUserId (String) - The ID of the user to whom the deal is assigned.\n    \n- createdByUserId (String) - The ID of the user who created the deal.\n    \n- pipelineId (Number) - The ID of the pipeline to which the deal belongs.\n    \n- amount (String) - The amount associated with the deal.\n    \n- pipelineStageName (String) - The name of the pipeline stage.\n    \n- position (Number) - The position of the deal in the pipeline.\n    \n- pipelineStageId (Number) - The ID of the pipeline stage.\n    \n\n#### Pre-request Script\n\nTo execute the 'Customers' collection before creating a deal, add a pre-request script to call the 'Customers' collection before making the POST request to this endpoint.\n\n#### Example\n\n``` json\n{\n  \"type\": 0,\n  \"dealType\": 15,\n  \"customerContacts\": [\n    {\n      \"customerId\": \"{{customerId}}\",\n      \"contactId\": 0\n    }\n  ],\n  \"description\": \"description\",\n  \"title\": \"deal title\",\n  \"assignedUserId\": \"a0cb3235-ea75-ef11-bdfd-002248 ...\",\n  \"createdByUserId\": \"a0cb3235-ea75-ef11-bdfd-002248 ...\",\n  \"pipelineId\": 34,\n  \"amount\": \"324\",\n  \"pipelineStageName\": \"New Stage\",\n  \"position\": 1,\n  \"pipelineStageId\": 222\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"id": "fbfaeaaa-acf0-486c-b20c-e5c2d33d4589",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{host}}/{{customer_endpoint}}"
 			},
 			"response": []
 		}
