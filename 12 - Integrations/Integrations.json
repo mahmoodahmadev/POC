@@ -1,0 +1,416 @@
+{
+	"info": {
+		"_postman_id": "169b7ec2-de1d-4b44-9c33-fd356fb41810",
+		"name": "12 - Integrations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a2c5fbcd-e006-4a45-b810-864716ecec22",
+						"exec": [
+							"const response = pm.response.json()",
+							"",
+							"pm.collectionVariables.set('token', response.authToken)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "fb00b8b0-6a03-403a-9bc5-834313a53ecb",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"dealerId\": \"{{login_dmsDealerId}}\",\n    \"userName\": \"{{login_username}}\",\n    \"password\": \"{{login_password}}\",\n    \"token\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/{{authentication_endpoint}}"
+			},
+			"response": []
+		},
+		{
+			"name": "get Customer Categories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "41f8c7a6-9929-4392-9298-f3c513d28493",
+						"exec": [
+							"const response = pm.response.json()\r",
+							"\r",
+							"let testCategoryDetails;\r",
+							"const cateogoryDetails = response.forEach(category => {\r",
+							"    if(category.name === \"Employee\"){\r",
+							"        testCategoryDetails = category;\r",
+							"\r",
+							"    }\r",
+							"})\r",
+							"\r",
+							"pm.collectionVariables.set(\"categoryDealerId\",testCategoryDetails.dealerId)\r",
+							"pm.collectionVariables.set(\"customerCategoryId\",testCategoryDetails.customerCategoryId)\r",
+							"pm.collectionVariables.set(\"categoryLastUpdated\",testCategoryDetails.lastUpdated)\r",
+							"pm.collectionVariables.set(\"categoryStatus\",testCategoryDetails.isActive)\r",
+							"pm.collectionVariables.set(\"categoryName\",testCategoryDetails.name)\r",
+							"\r",
+							"// Verify the status code\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Verify the response time\r",
+							"pm.test(\"Response time is less than 1500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+							"});\r",
+							"\r",
+							"// Verify the response body schema and properties\r",
+							"pm.test(\"Response body is an array\", function () {\r",
+							"    pm.expect(response).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Loop through each category in the response to verify its properties\r",
+							"response.forEach(category => {\r",
+							"    pm.test(`Verify category with ID ${category.customerCategoryId}`, function () {\r",
+							"        pm.expect(category.dealerId).to.exist;\r",
+							"        pm.expect(category.customerCategoryId).to.exist;\r",
+							"        pm.expect(category.lastUpdated).to.exist;\r",
+							"        pm.expect(category.isActive).to.exist;\r",
+							"        pm.expect(category.name).to.exist;\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "78222caa-8991-4659-b4ed-483dbe413a2f",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{host}}/{{customer_categories_endpoint}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Customer",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d25d76c0-3568-4d11-a711-0dcc67618b1f",
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "a00c48a3-ee2e-417b-b567-c5de3c858668",
+						"exec": [
+							"const response = pm.response.json()\r",
+							"\r",
+							"// Test for status code\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test for response time\r",
+							"pm.test(\"Response time is less than 3000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+							"});\r",
+							"\r",
+							"// Test for response body properties and types\r",
+							"pm.test(\"Verify response body properties and types\", function () {\r",
+							"    \r",
+							"    pm.expect(response.name).to.be.a('string');\r",
+							"    pm.expect(response.firstName).to.be.a('string');\r",
+							"    pm.expect(response.lastName).to.be.a('string');\r",
+							"    pm.expect(response.middleName).to.be.a('string');\r",
+							"    pm.expect(response.jobTitle).to.be.a('string');\r",
+							"    pm.expect(response.crmCustomerId).to.be.a('number');\r",
+							"    pm.expect(response.customerId).to.be.a('number');\r",
+							"    pm.expect(response.dealerId).to.be.a('number');\r",
+							"    pm.expect(response.isActive).to.be.a('boolean');\r",
+							"    pm.expect(response.lastUpdated).to.be.a('string');\r",
+							"    pm.expect(response.crmLastUpdated).to.be.a('string');\r",
+							"    pm.expect(response.createdAt).to.be.a('string');\r",
+							"    pm.expect(response.optIn).to.be.a('number');\r",
+							"    pm.expect(response.optOutDate).to.be.null;\r",
+							"    pm.expect(response.optInEmail).to.be.a('boolean');\r",
+							"    pm.expect(response.optOutEmailDate).to.be.null;\r",
+							"    pm.expect(response.customerNumber).to.be.a('string');\r",
+							"    pm.expect(response.isOrganization).to.be.a('boolean');\r",
+							"    pm.expect(response.organizationName).to.be.a('string');\r",
+							"    pm.expect(response.salesRepName).to.be.a('string');\r",
+							"    pm.expect(response.primaryCellPhoneId).to.be.null;\r",
+							"    pm.expect(response.primaryEmailId).to.be.a('number');\r",
+							"    pm.expect(response.notes).to.be.a('string');\r",
+							"    pm.expect(response.defaultPhoneType).to.be.a('number');\r",
+							"    pm.expect(response.dob).to.be.a('string');\r",
+							"    pm.expect(response.isFacebookCustomer).to.be.a('boolean');\r",
+							"    pm.expect(response.facebookCustomerId).to.be.null;\r",
+							"    pm.expect(response.reviewFlag).to.be.a('boolean');\r",
+							"    pm.expect(response.defaultPhoneNumberForMessenger).to.be.a('string');\r",
+							"    pm.expect(response.customerPhones).to.be.an('array');\r",
+							"    pm.expect(response.customerEmails).to.be.an('array');\r",
+							"    pm.expect(response.customerAddresses).to.be.an('array');\r",
+							"    pm.expect(response.customerCategories).to.be.an('array');\r",
+							"    pm.expect(response.customerSurveyRating).to.be.null;\r",
+							"    pm.expect(response.lastSurveyRating).to.be.null;\r",
+							"    pm.expect(response.salesStageId).to.be.null;\r",
+							"    pm.expect(response.conversationsPhoneIds).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"// Test for response body array elements\r",
+							"pm.test(\"Verify response body array elements\", function () {\r",
+							"    \r",
+							"    response.customerPhones.forEach(function(phone) {\r",
+							"        pm.expect(phone.id).to.be.a('number');\r",
+							"        pm.expect(phone.dealerId).to.be.a('number');\r",
+							"        pm.expect(phone.customerId).to.be.a('number');\r",
+							"        pm.expect(phone.crmCustomerId).to.be.a('number');\r",
+							"        pm.expect(phone.phoneType).to.be.a('number');\r",
+							"        pm.expect(phone.lastUpdated).to.be.a('string');\r",
+							"        pm.expect(phone.phoneNumber).to.be.a('string');\r",
+							"        // ... Add more assertions for other properties\r",
+							"    });\r",
+							"\r",
+							"    response.customerEmails.forEach(function(email) {\r",
+							"        pm.expect(email.id).to.be.a('number');\r",
+							"        pm.expect(email.crmCustomerId).to.be.a('number');\r",
+							"        pm.expect(email.customerId).to.be.a('number');\r",
+							"        pm.expect(email.dealerId).to.be.a('number');\r",
+							"        pm.expect(email.emailType).to.be.a('number');\r",
+							"        pm.expect(email.address).to.be.a('string');\r",
+							"        pm.expect(email.lastUpdated).to.be.a('string');\r",
+							"        // ... Add more assertions for other properties\r",
+							"    });\r",
+							"\r",
+							"    response.customerAddresses.forEach(function(address) {\r",
+							"        pm.expect(address.id).to.be.a('number');\r",
+							"        pm.expect(address.customerId).to.be.a('number');\r",
+							"        pm.expect(address.dealerId).to.be.a('number');\r",
+							"        pm.expect(address.crmCustomerId).to.be.a('number');\r",
+							"        pm.expect(address.addressType).to.be.a('number');\r",
+							"        pm.expect(address.address1).to.be.a('string');\r",
+							"        pm.expect(address.address2).to.be.a('string');\r",
+							"        pm.expect(address.city).to.be.a('string');\r",
+							"        pm.expect(address.stateProvince).to.be.a('string');\r",
+							"        pm.expect(address.zipPostal).to.be.a('string');\r",
+							"        // ... Add more assertions for other properties\r",
+							"    });\r",
+							"\r",
+							"    response.customerCategories.forEach(function(category) {\r",
+							"        pm.expect(category.dealerId).to.be.a('number');\r",
+							"        pm.expect(category.customerCategoryId).to.be.a('string');\r",
+							"        pm.expect(category.lastUpdated).to.be.a('string');\r",
+							"        pm.expect(category.isActive).to.be.a('boolean');\r",
+							"        pm.expect(category.name).to.be.a('string');\r",
+							"        // ... Add more assertions for other properties\r",
+							"    });\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set(\"createdCustomerId\", response.crmCustomerId)\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "efe7ae6c-ac35-49cc-83d5-1a2351a619e2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"crmCustomerId\": 0,\r\n    \"customerId\": 0,\r\n    \"dealerId\": 888462,\r\n    \"organizationName\": \"\",\r\n    \"salesRepName\": \"Dean Riddle\",\r\n    \"firstName\": \"{{$randomFirstName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"middleName\": \"\",\r\n    \"isOrganization\": false,\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"dob\": \"04/01/2025\",\r\n    \"customerAddresses\": [\r\n        {\r\n            \"address1\": \"{{$randomStreetName}}\",\r\n            \"address2\": \"{{$randomStreetName}}\",\r\n            \"addressType\": \"1\",\r\n            \"city\": \"{{$randomCity}}\",\r\n            \"stateProvince\": \"SC\",\r\n            \"zipPostal\": \"19231\",\r\n            \"stateShort\": \"SC\"\r\n        },\r\n        {\r\n            \"address1\": \"{{$randomStreetName}}\",\r\n            \"address2\": \"{{$randomStreetName}}\",\r\n            \"addressType\": \"2\",\r\n            \"city\": \"{{$randomCity}}\",\r\n            \"stateProvince\": \"NY\",\r\n            \"zipPostal\": \"11368\",\r\n            \"stateShort\": \"NY\"\r\n        }\r\n    ],\r\n    \"customerCategories\": [\r\n        {\r\n            \"dealerId\": {{categoryDealerId}},\r\n            \"customerCategoryId\": \"{{customerCategoryId}}\",\r\n            \"lastUpdated\": \"{{categoryLastUpdated}}\",\r\n            \"isActive\": \"{{categoryStatus}}\",\r\n            \"name\": \"{{categoryName}}\"\r\n        }\r\n    ],\r\n    \"customerEmails\": [\r\n        {\r\n            \"address\": \"{{$randomExampleEmail}}\",\r\n            \"contactId\": 0,\r\n            \"dealerId\": 0,\r\n            \"emailType\": 6,\r\n            \"lastUpdated\": \"\",\r\n            \"isPrimary\": false,\r\n            \"isDefault\": true\r\n        },\r\n        {\r\n            \"address\": \"{{$randomExampleEmail}}\",\r\n            \"contactId\": 0,\r\n            \"dealerId\": 0,\r\n            \"emailType\": 7,\r\n            \"lastUpdated\": \"\",\r\n            \"isPrimary\": false,\r\n            \"isDefault\": false\r\n        },\r\n        {\r\n            \"address\": \"{{$randomExampleEmail}}\",\r\n            \"contactId\": 0,\r\n            \"dealerId\": 0,\r\n            \"emailType\": 64,\r\n            \"lastUpdated\": \"\",\r\n            \"isPrimary\": false,\r\n            \"isDefault\": false\r\n        }\r\n    ],\r\n    \"customerPhones\": [\r\n        {\r\n            \"id\": 0,\r\n            \"customerId\": 0,\r\n            \"dealerId\": 0,\r\n            \"lastUpdated\": \"\",\r\n            \"phoneNumber\": \"{{$randomPhoneNumber}}\",\r\n            \"extension\": \"\",\r\n            \"phoneType\": 236,\r\n            \"isPrimary\": false,\r\n            \"verificationStatus\": 1,\r\n            \"isDefault\": true\r\n        }\r\n    ],\r\n    \"conversationsPhoneIds\": [],\r\n    \"optIn\": 1,\r\n    \"optInEmail\": false,\r\n    \"optOutDate\": \"\",\r\n    \"notes\": \"{{$randomCatchPhrase}}\",\r\n    \"defaultPhoneType\": -1,\r\n    \"customerNumber\": \"{{$randomPassword}}\",\r\n    \"dateOfBirth\": null,\r\n    \"jobTitle\": \"\",\r\n    \"salesStageId\": 0,\r\n    \"defaultPhoneNumberForMessenger\": \"\",\r\n    \"reviewFlag\": false,\r\n    \"IsFacebookCustomer\": false,\r\n    \"FacebookCustomerId\": null\r\n}\r\n\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/{{customer_endpoint}}",
+				"description": "The HTTP POST request to `{{base_url}}/{{customer_endpoint}}` is used to create a new customer with the provided information. The request payload includes details such as the dealer ID, organization name, sales representative name, customer addresses, emails, phones, opt-in status, notes, and more.\n\nThe response of the request is a JSON schema representing the customer's details. It includes fields such as name, organization name, contact IDs, phone numbers, email addresses, addresses, opt-in status, notes, and more. The schema provides a structured format for understanding the data returned after creating a new customer."
+			},
+			"response": []
+		},
+		{
+			"name": "Deals",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23078bf3-8287-4a08-979e-24f23846d3e2",
+						"exec": [
+							"// Test Scenario 1: Verify the status code is 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test Scenario 2: Verify the response time is less than 3000ms\r",
+							"pm.test(\"Response time is less than 3000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.lessThan(3000);\r",
+							"});\r",
+							"\r",
+							"// Test Scenario 3: Verify the response body contains the text \"Success\"\r",
+							"pm.test(\"Response body contains 'Success'\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Success\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "cbf58e8a-fe14-492e-b246-f03a7627ff0a",
+						"exec": [
+							"const utilities = pm.require('@blorguy/utilities');\r",
+							"\r",
+							"const randomAmount = utilities.generateRandomNumber(5);\r",
+							"\r",
+							"pm.collectionVariables.set(\"dealAmount\", randomAmount)\r",
+							"\r",
+							"console.log(pm.request.toJSON())"
+						],
+						"type": "text/javascript",
+						"packages": {
+							"@blorguy/utilities": {
+								"id": "0196966f-f345-7ce1-8cb7-f896de72f882"
+							}
+						}
+					}
+				}
+			],
+			"id": "3d465aaf-8aa8-448d-b958-8610568f6f38",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": 0,\r\n    \"dealType\": 15,\r\n    \"customerContacts\": [\r\n        {\r\n            \"customerId\": \"{{createdCustomerId}}\",\r\n            \"contactId\": 0\r\n        }\r\n    ],\r\n    \"description\": \"{{$randomPhrase}}\",\r\n    \"title\": \"{{$randomFullName}}\",\r\n    \"assignedUserId\": \"a0cb3235-ea75-ef11-bdfd-00224845376a\",\r\n    \"createdByUserId\": \"a0cb3235-ea75-ef11-bdfd-00224845376a\",\r\n    \"pipelineId\": 34,\r\n    \"amount\": \"{{dealAmount}}\",\r\n    \"pipelineStageName\": \"New Stage\",\r\n    \"position\": 1,\r\n    \"pipelineStageId\": 222\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/{{deal_creation_endpoint}}/:dealerid",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{deal_creation_endpoint}}",
+						":dealerid"
+					],
+					"variable": [
+						{
+							"key": "dealerid",
+							"value": "{{login_dmsDealerId}}"
+						}
+					]
+				},
+				"description": "### Add New Deal\n\nThis endpoint allows you to add a new deal to the CRM system.\n\n#### Request Body\n\n- type (Number) - The type of the deal.\n    \n- dealType (Number) - The type of deal being added.\n    \n- customerContacts (Array) - An array of customer contacts associated with the deal, including customer and contact IDs.\n    \n- description (String) - The description of the deal.\n    \n- title (String) - The title of the deal.\n    \n- assignedUserId (String) - The ID of the user to whom the deal is assigned.\n    \n- createdByUserId (String) - The ID of the user who created the deal.\n    \n- pipelineId (Number) - The ID of the pipeline to which the deal belongs.\n    \n- amount (String) - The amount associated with the deal.\n    \n- pipelineStageName (String) - The name of the pipeline stage.\n    \n- position (Number) - The position of the deal in the pipeline.\n    \n- pipelineStageId (Number) - The ID of the pipeline stage.\n    \n\n#### Pre-request Script\n\nTo execute the 'Customers' collection before creating a deal, add a pre-request script to call the 'Customers' collection before making the POST request to this endpoint.\n\n#### Example\n\n``` json\n{\n  \"type\": 0,\n  \"dealType\": 15,\n  \"customerContacts\": [\n    {\n      \"customerId\": \"{{customerId}}\",\n      \"contactId\": 0\n    }\n  ],\n  \"description\": \"description\",\n  \"title\": \"deal title\",\n  \"assignedUserId\": \"a0cb3235-ea75-ef11-bdfd-002248 ...\",\n  \"createdByUserId\": \"a0cb3235-ea75-ef11-bdfd-002248 ...\",\n  \"pipelineId\": 34,\n  \"amount\": \"324\",\n  \"pipelineStageName\": \"New Stage\",\n  \"position\": 1,\n  \"pipelineStageId\": 222\n}\n\n ```"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "{{token}}"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "698d864f-61d6-4639-850d-571bf5f2eb44",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "8e216e3b-bca6-4c4d-8e30-4e2298c08ab9",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "dealAmount",
+			"value": ""
+		},
+		{
+			"key": "categoryDealerId",
+			"value": ""
+		},
+		{
+			"key": "customerCategoryId",
+			"value": ""
+		},
+		{
+			"key": "categoryLastUpdated",
+			"value": ""
+		},
+		{
+			"key": "categoryStatus",
+			"value": ""
+		},
+		{
+			"key": "categoryName",
+			"value": ""
+		},
+		{
+			"key": "createdCustomerId",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
