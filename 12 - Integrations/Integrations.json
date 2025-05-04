@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "169b7ec2-de1d-4b44-9c33-fd356fb41810",
 		"name": "12 - Integrations",
+		"description": "### 🚀 **Postman Integrations Collection**\n\nThis collection demonstrates how to integrate Postman with various services, tools, and platforms to streamline your API testing and workflow automation.\n\n---\n\n### 🌐 **Key Features:**\n\n- **CI/CD Pipeline Integration**  \n      \n    🔄 Automate API testing within your Continuous Integration/Continuous Deployment (CI/CD) pipelines.  \n      \n    🛠️ Platforms: Jenkins, CircleCI, Travis CI\n    \n- **Version Control Integration**  \n      \n    📂 Sync Postman collections with GitHub or Bitbucket.  \n      \n    👥 Ideal for team collaboration and version control.\n    \n- **Monitoring Integrations**  \n      \n    🕵️‍♂️ Schedule API tests and monitor health.  \n      \n    📱 Integrate with Slack to receive notifications about API test results.\n    \n- **Jira Integration**  \n      \n    📝 Create or update Jira tickets based on API test results.  \n      \n    🔗 Facilitate seamless communication between dev and QA teams.\n    \n- **Slack Notifications**  \n      \n    🔔 Receive real-time alerts in Slack about API test failures or other significant events.\n    \n- **Webhooks**  \n      \n    🔗 Trigger actions in other platforms or tools based on Postman events.\n    \n\n---\n\n### 🛠️ **Use Cases:**\n\n- **Automated API Testing in CI/CD**  \n      \n    🔄 Ensure every code push or build triggers an automatic API test.  \n      \n    ✔️ Integrates with your DevOps pipeline for continuous validation.\n    \n- **Team Collaboration**  \n      \n    🤝 Make collaboration easy by syncing Postman with GitHub and Slack for notifications.  \n      \n    💬 Jira and Slack help your team stay aligned on API issues.\n    \n- **Incident Management**  \n      \n    🚨 Instantly report issues to Jira and alert your team via Slack.  \n      \n    ⚡ Speed up your response time to critical API issues.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
@@ -359,7 +360,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "698d864f-61d6-4639-850d-571bf5f2eb44",
+				"id": "2fc0cefe-2785-445d-bb5f-102e7915b347",
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
@@ -370,11 +371,11 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "8e216e3b-bca6-4c4d-8e30-4e2298c08ab9",
+				"id": "29c2d3ff-d7d3-4d4d-a7c3-f1b65baa80a1",
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
-					""
+					"//some text"
 				]
 			}
 		}
