@@ -27,7 +27,8 @@
 					"script": {
 						"id": "1a9254f7-efec-412e-a3f5-b4450c6ccace",
 						"exec": [
-							"console.log(\"changes synced\")"
+							"console.log(\"changes synced\")\r",
+							"// fork of original"
 						],
 						"type": "text/javascript",
 						"packages": {}
