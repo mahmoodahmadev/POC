@@ -201,9 +201,9 @@
 											"pm.test('Check if the department is created with expected data', () => {",
 											"",
 											"    // Get the corresponding environment variables",
-											"    let expecttedCrmUserId = pm.environment.get(\"crmUserId\");",
-											"    let expectedDealerId = pm.environment.get(\"primaryDealerId\");",
-											"    let expectedDepartmentName = pm.environment.get(\"departmentName\");",
+											"    let expecttedCrmUserId = pm.collectionVariables.get(\"crmUserId\");",
+											"    let expectedDealerId = pm.collectionVariables.get(\"primaryDealerId\");",
+											"    let expectedDepartmentName = pm.collectionVariables.get(\"departmentName\");",
 											"",
 											"    let actualCrmUserId = response.crmUserIds[0]",
 											"    let actualDealerId = response.dealerId",
@@ -252,7 +252,6 @@
 									],
 									"variable": [
 										{
-											"id": "bee304f7-061c-44ea-aa2a-6f6186232a38",
 											"key": "dmsdealerid",
 											"value": "{{login_dmsDealerId}}"
 										}
@@ -402,6 +401,28 @@
 				}
 			],
 			"id": "763ff7c3-c3b3-4760-a5e0-c970378e1bcf"
+		}
+	],
+	"variable": [
+		{
+			"key": "created_department_id",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "primaryDealerId",
+			"value": ""
+		},
+		{
+			"key": "crmUserId",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ""
 		}
 	]
 }
