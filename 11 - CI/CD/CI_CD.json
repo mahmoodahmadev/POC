@@ -317,7 +317,7 @@
 											"    const actualDmsDealerId = departmentData.dmsDealerIdCrm",
 											"    const actualDealeriId = departmentData.dealerId",
 											"    const actualDepartmentName = departmentData.departmentName",
-											"",
+											"    console.log(`${actualDmsDealerId}, ${expectedDmsDealerId}`)",
 											"    pm.expect(actualDealeriId).to.equal(expectedDealeriId)",
 											"    pm.expect(actualDmsDealerId).to.equal(expectedDmsDealerId)",
 											"    pm.expect(actualDepartmentName).to.equal(expectedDepartmentName)",
@@ -352,12 +352,10 @@
 									],
 									"variable": [
 										{
-											"id": "8960e8bf-4478-44d3-97cb-08cab40865fa",
 											"key": "dmsdealerid",
 											"value": "{{login_dmsDealerId}}"
 										},
 										{
-											"id": "27134fc1-9853-4b66-a0fd-521748d59a6d",
 											"key": "userid",
 											"value": "{{userId}}"
 										}
