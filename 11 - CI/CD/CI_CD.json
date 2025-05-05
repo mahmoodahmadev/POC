@@ -153,9 +153,9 @@
 									"script": {
 										"id": "c037be26-b167-4e1a-b4c5-67c691a0cd7d",
 										"exec": [
-											"const departmentName = pm.environment.replaceIn(\"{{$randomDepartment}}\")",
+											"const departmentName = pm.collectionVariables.replaceIn(\"{{$randomDepartment}}\")",
 											"",
-											"pm.environment.set('departmentName', departmentName)"
+											"pm.collectionVariables.set('departmentName', departmentName)"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -422,6 +422,10 @@
 		},
 		{
 			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "departmentName",
 			"value": ""
 		}
 	]
